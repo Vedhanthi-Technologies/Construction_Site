@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vedhanthi Construction</title>
+    <link rel="icon" type="image/png" href="images/logo-icon.png" />
+    <style>
+      /* General styling */
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 20px;
+        background-image: url("./uploads/gallery4.jpg");
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        height: 620px;
+        background-color: #ffffffbb;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        padding: 10px;
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 20px 0px;
+        color: black;
+        margin: 0;
+      }
+
+      /* Container for scrollable table */
+      .table-container {
+        overflow-y: auto;
+        max-height: 500px;
+        border-radius: 10px;
+        position: relative;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #e8aa00e5;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        position: sticky;
+        top: 0; /* Ensure the header stays on top */
+        z-index: 2; /* Ensure it stays above the table body */
+      }
+
+      th:hover {
+        background-color: #0056b3;
+      }
+
+      tr:nth-child(odd) {
+        background-color: #f9f9f9;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dbdbdbec;
+      }
+
+      tr:hover {
+        background-color: #f1f1f1;
+      }
+
+      /* Hide the scrollbar */
+      ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+
+      /* Search input style */
+      #searchInput {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Customer Enquiry</h2>
+
+      <!-- Search bar -->
+      <!-- <input type="text" id="searchInput" placeholder="Search..." /> -->
+
+      <div class="table-container">
+        <table id="myTable">
+          <tr>
+            <th onclick="sortTable(0)">Name</th>
+            <th onclick="sortTable(1)">Email</th>
+            <th onclick="sortTable(2)">Phone</th>
+            <th onclick="sortTable(4)" style="width: 10%">Product</th>
+            <th onclick="sortTable(3)" style="width: 13%"></th>
+            <th onclick="sortTable(5)">Message</th>
+          </tr>
+          <tbody id="bookings_body">
+            <!-- Table body content will be dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      // JavaScript code for sorting and filtering table rows
+      function sortTable(columnIndex) {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("myTable");
+        switching = true;
+        var direction = "asc";
+
+        while (switching) {
+          switching = false;
+          rows = table.rows;
+
+          for (i = 1; i < rows.length - 1; i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("td")[columnIndex];
+            y = rows[i + 1].getElementsByTagName("td")[columnIndex];
+
+            if (direction == "asc") {
+              if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                shouldSwitch = true;
+                break;
+              }
+            } else if (direction == "desc") {
+              if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                shouldSwitch = true;
+                break;
+              }
+            }
+          }
+
+          if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+          }
+        }
+
+        if (direction == "asc") {
+          direction = "desc";
+        } else {
+          direction = "asc";
+        }
+      }
+
+      // Filter function based on search input
+      document
+        .getElementById("searchInput")
+        .addEventListener("keyup", function () {
+          var input, filter, table, tr, td, i, txtValue;
+          input = document.getElementById("searchInput");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("myTable");
+          tr = table.getElementsByTagName("tr");
+
+          for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            let found = false;
+            for (let j = 0; j < td.length; j++) {
+              if (td[j]) {
+                txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                  found = true;
+                }
+              }
+            }
+            if (found) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }
+        });
+    </script>
+    <script src="js/display.js"></script>
+  </body>
+</html>
