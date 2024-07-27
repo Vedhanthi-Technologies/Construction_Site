@@ -1,21 +1,12 @@
-/*!
- * Retina.js v2.1.0
- *
- * Copyright 2016 Axial, LLC
- * Released under the MIT license
- *
- * Retina.js is an open source script that makes it easy to serve
- * high-resolution images to devices with retina displays.
- */
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 /*
  * Determine whether or not `window` is available.
  */
-var hasWindow = typeof window !== 'undefined';
+var hasWindow = typeof window !== "undefined";
 
 /*
  * Get the device pixel ratio per our environment.
@@ -32,12 +23,12 @@ var inlineReplace = /url\(('|")?([^\)'"]+)('|")?\)/i;
 /*
  * Define our selectors for elements to target.
  */
-var selector = '[data-rjs]';
+var selector = "[data-rjs]";
 
 /*
  * Define the attribute we'll use to mark an image as having been processed.
  */
-var processedAttr = 'data-rjs-processed';
+var processedAttr = "data-rjs-processed";
 
 /**
  * Shortcut for turning some iterable object into an array.
@@ -74,8 +65,8 @@ function chooseCap(cap) {
      * user provided, we'll use what the user provided.
      */
   } else {
-      return numericCap;
-    }
+    return numericCap;
+  }
 }
 
 /**
@@ -87,13 +78,13 @@ function chooseCap(cap) {
  * @return {Element} The same element that was passed in.
  */
 function forceOriginalDimensions(image) {
-  if (!image.hasAttribute('data-no-resize')) {
+  if (!image.hasAttribute("data-no-resize")) {
     if (image.offsetWidth === 0 && image.offsetHeight === 0) {
-      image.setAttribute('width', image.naturalWidth);
-      image.setAttribute('height', image.naturalHeight);
+      image.setAttribute("width", image.naturalWidth);
+      image.setAttribute("height", image.naturalHeight);
     } else {
-      image.setAttribute('width', image.offsetWidth);
-      image.setAttribute('height', image.offsetHeight);
+      image.setAttribute("width", image.offsetWidth);
+      image.setAttribute("height", image.offsetHeight);
     }
   }
   return image;
@@ -117,17 +108,17 @@ function setSourceIfAvailable(image, retinaURL) {
    * load listener fires, it means the URL is correct and we will then
    * attach it to the user's image.
    */
-  var testImage = document.createElement('img');
-  testImage.addEventListener('load', function () {
+  var testImage = document.createElement("img");
+  testImage.addEventListener("load", function () {
     /*
      * If we're dealing with an image tag, force it's dimensions
      * and set the source attribute. If not, go after the background-image
      * inline style.
      */
-    if (imgType === 'img') {
-      forceOriginalDimensions(image).setAttribute('src', retinaURL);
+    if (imgType === "img") {
+      forceOriginalDimensions(image).setAttribute("src", retinaURL);
     } else {
-      image.style.backgroundImage = 'url(' + retinaURL + ')';
+      image.style.backgroundImage = "url(" + retinaURL + ")";
     }
   });
 
@@ -135,7 +126,7 @@ function setSourceIfAvailable(image, retinaURL) {
    * Attach the retina URL to our proxy image to load in the new
    * image resource.
    */
-  testImage.setAttribute('src', retinaURL);
+  testImage.setAttribute("src", retinaURL);
 
   /*
    * Mark our image as processed so that it won't be processed again.
@@ -153,7 +144,8 @@ function setSourceIfAvailable(image, retinaURL) {
  * @return {undefined}
  */
 function dynamicSwapImage(image, src) {
-  var rjs = arguments.length <= 2 || arguments[2] === undefined ? 1 : arguments[2];
+  var rjs =
+    arguments.length <= 2 || arguments[2] === undefined ? 1 : arguments[2];
 
   var cap = chooseCap(rjs);
 
@@ -161,7 +153,7 @@ function dynamicSwapImage(image, src) {
    * Don't do anything if the cap is less than 2 or there is no src.
    */
   if (src && cap > 1) {
-    var newSrc = src.replace(srcReplace, '@' + cap + 'x$1');
+    var newSrc = src.replace(srcReplace, "@" + cap + "x$1");
     setSourceIfAvailable(image, newSrc);
   }
 }
@@ -192,9 +184,11 @@ function manualSwapImage(image, src, hdsrc) {
  */
 function getImages(images) {
   if (!images) {
-    return typeof document !== 'undefined' ? arrayify(document.querySelectorAll(selector)) : [];
+    return typeof document !== "undefined"
+      ? arrayify(document.querySelectorAll(selector))
+      : [];
   } else {
-    return typeof images.forEach === 'function' ? images : arrayify(images);
+    return typeof images.forEach === "function" ? images : arrayify(images);
   }
 }
 
@@ -206,7 +200,7 @@ function getImages(images) {
  * @return {String}
  */
 function cleanBgImg(img) {
-  return img.style.backgroundImage.replace(inlineReplace, '$2');
+  return img.style.backgroundImage.replace(inlineReplace, "$2");
 }
 
 /**
@@ -224,9 +218,9 @@ function cleanBgImg(img) {
 function retina(images) {
   getImages(images).forEach(function (img) {
     if (!img.getAttribute(processedAttr)) {
-      var isImg = img.nodeName.toLowerCase() === 'img';
-      var src = isImg ? img.getAttribute('src') : cleanBgImg(img);
-      var rjs = img.getAttribute('data-rjs');
+      var isImg = img.nodeName.toLowerCase() === "img";
+      var src = isImg ? img.getAttribute("src") : cleanBgImg(img);
+      var rjs = img.getAttribute("data-rjs");
       var rjsIsNumber = !isNaN(parseInt(rjs, 10));
 
       /*
@@ -246,7 +240,7 @@ function retina(images) {
  * If this environment has `window`, activate the plugin.
  */
 if (hasWindow) {
-  window.addEventListener('load', retina);
+  window.addEventListener("load", retina);
   window.retinajs = retina;
 }
 
